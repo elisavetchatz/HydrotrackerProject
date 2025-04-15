@@ -23,7 +23,9 @@ The repository is organized into three main folders:
 ```
 📦 Hydrotracker
 ├── 📁 measurements       
-├── 📁 media              
+├── 📁 media       
+    ├── 📁 demo
+│   └── 📁 promo       
 ├── 📁 src                
 │   ├── 📁 data_processing 
 │   └── 📁 networking      
