@@ -30,9 +30,9 @@ class HydrotrackerMonitor:
 
             if state == "EMPTY":
                 label.config(bg="red")
-            elif state == "FULL":
+            elif state == "ΝΟΤEMPTY":
                 label.config(bg="lightgreen")
-            elif state == "NOEXIST":
+            elif state == "NOTEXIST":
                 label.config(bg="gray")
             else:
                 label.config(bg="lightgray")
