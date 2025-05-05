@@ -9,11 +9,11 @@ while True:
         try:
             # reaad line
             myData = arduino_Serial_Data.readline().decode('utf-8').strip()
-
+            print(f"RAW: {myData}")  # Always print what comes in
             # Node:3 - State:EMPTY
-            if myData.startswith("Node:") and " - State:" in myData:
-                parts = myData.split(" - state:")
-                node = parts[0].replace("node:", "").strip()
+            if myData.startswith("Node") and " - State: " in myData:
+                parts = myData.split(" - State:")
+                node = parts[0].replace("Node", "").strip()
                 state = parts[1].strip()
 
                 print(f"Node {node} is in state: {state}")
