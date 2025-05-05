@@ -7,17 +7,31 @@
 RF22Router rf22(MY_ADDRESS);
 
 enum state {NOEXIST, EMPTY, FULL};
+
+state previusState = NOEXIST;
+
 const char* stateToString(state s) {
     switch (s) {
-        case NOEXIST: return "NOEXIST";
+        case NOEXIST: return "NOTEXIST";
         case EMPTY:   return "EMPTY";
-        case FULL:    return "FULL";
+        case FULL:    return "NOTEMPTY";
         default:      return "UNKNOWN";
     }
 }
 
 state getCurrentState() {
     // TODO: Take measurements and determine the state of the node
+
+    // For now, we will simulate the state with a random number
+    // 0: NOEXIST, 1: EMPTY, 2: FULL
+    int randomValue = random(0, 3);
+    if (randomValue == 0) {
+        return NOEXIST;
+    } else if (randomValue == 1) {
+        return EMPTY;
+    } else if (randomValue == 2) {
+        return FULL;
+    }
 
     return NOEXIST;
 }
@@ -30,7 +44,7 @@ void sendPacket(state currentState) {
     memset(data_send, '\0', sizeof(data_send));
 
     const char* stateStr = stateToString(currentState);
-    sprintf(data_read, "%s", MY_ADDRESS, stateStr);
+    sprintf(data_read, "%s", stateStr);
     uint8_t msg_len = strlen(data_read) + 1;
     memcpy(data_send, data_read, msg_len);
 
@@ -71,6 +85,16 @@ void setup() {
 
 void loop() {
 
-    sendPacket(getCurrentState());
+    state currentState = getCurrentState();
+
+    if(currentState != previusState) {
+        sendPacket(currentState);
+        previusState = currentState;
+    }
+    else{
+        Serial.print("State unchanged: ");
+        Serial.println(stateToString(currentState));
+    }
+
     delay(1000); // Delay between packets
 }
