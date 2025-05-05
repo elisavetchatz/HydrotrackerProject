@@ -1,6 +1,6 @@
 import serial 
 
-arduino_Serial_Data = serial.Serial('COM3', 9600, timeout=1)
+arduino_Serial_Data = serial.Serial('COM5', 9600, timeout=1)
 
 print("Listening for data from Arduino...")
 
