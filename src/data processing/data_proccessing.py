@@ -1,7 +1,7 @@
 import tkinter as tk
 from logging import setup_logger
 from hydrotracker_monitor import HydrotrackerMonitor
-from serial_reader import start_serial_reader
+from serial_reader import SerialReader
 
 if __name__ == "__main__":
     
@@ -11,5 +11,8 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = HydrotrackerMonitor(root, logger)
 
-    start_serial_reader(app)
+    reader = SerialReader(app, logger, port='COM5', baudrate=9600)
     root.mainloop()
+    reader.start()
+
+    #reader.stop()
