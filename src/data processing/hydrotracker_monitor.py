@@ -3,31 +3,33 @@ import random
 
 # CONFIG
 MAX_NODES = 5                   # maximum number of nodes
-UPDATE_INTERVAL = 10000         # milliseconds to update the GUI (review and maybe change)
+UPDATE_INTERVAL = 1000          # milliseconds to update the GUI 
 
 class HydrotrackerMonitor:
     def __init__(self, root, logger):
         self.root = root        # main window
-        self.root.title("HydroTracker Monitor")
         self.logger = logger
-        self.labels = {}        #labels for each coaster
-        self.node_states = {}   # to remember the state of each coaster
+        self.root.title("HydroTracker Monitor")
+        self.labels = {}        # dictionary that connects each node_id to a gui label
+        self.node_states = {}   # dictionary that saves the currect state of each node
 
         # LABELS
         for node_id in range(1, MAX_NODES + 1):
             label = tk.Label(root, text=f"Node {node_id}: Waiting...", width=30, font=("Arial", 12), bg="lightgray")
             label.pack(pady=2)
+
             self.labels[node_id] = label
-            self.node_states[node_id] = "Unknown"
+            self.node_states[node_id] = "Unknown" # initial state of each node
 
         # START GUI UPDATE LOOP
         self.update_gui_loop()
         #self.simulate_random_states()
 
     def update_gui_loop(self):
+        """ Checks the state of each node and updates the GUI labels accordingly """
         for node_id, state in self.node_states.items():
             label = self.labels[node_id]
-            label.config(text=f"Node {node_id}: {state}")
+            label.config(text=f"Node {node_id}: {state}") 
 
             if state == "EMPTY":
                 label.config(bg="red")
@@ -38,16 +40,17 @@ class HydrotrackerMonitor:
             else:
                 label.config(bg="lightgray")
 
-        self.root.after(UPDATE_INTERVAL, self.update_gui_loop) # update every 100ms
+        self.root.after(UPDATE_INTERVAL, self.update_gui_loop) # update every UPDATE_INTERVAL milliseconds
 
-    def update_node_state(self, node_id, state):
+    def update_node_state(self, node_id, new_state):
+        """ Updates the state of a node when a new state is sent and logs the change """
+        previous = self.node_states[node_id]
+
         if node_id in self.node_states:
-            self.node_states[node_id] = state
-
-            previous = self.node_states[node_id]
-            if previous != state:
-                self.logger.info(f"Node {node_id} changed state: {previous} → {state}")
-            self.node_states[node_id] = state
+            #self.node_states[node_id] = new_state
+            if previous != new_state:
+                self.logger.info(f"Node {node_id} changed state: {previous} → {new_state}")
+            self.node_states[node_id] = new_state
 
     # def simulate_random_states(self):
     #     possible_states = ["FULL", "EMPTY", "NOEXIST"]
