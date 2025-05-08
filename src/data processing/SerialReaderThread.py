@@ -5,7 +5,7 @@ import threading
 PORT='COM5'  # Serial port to connect to
 BAUDRATE=9600  # Baud rate for the serial connection
 
-class SerialReader:
+class SerialReaderThread:
     """
     Manages a serial connection in a background thread and updates the GUI when new data arrives.
     """

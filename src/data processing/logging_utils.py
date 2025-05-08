@@ -9,5 +9,5 @@ def setup_logger(logfile='hydrotracker.log'):
         formatter = logging.Formatter('[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
-
+        
     return logger
