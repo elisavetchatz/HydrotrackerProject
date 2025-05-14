@@ -27,7 +27,19 @@ const char* stateToString(state s) {
     }
 }
 
+// float readAverageWeight(int samples = 5, int delayMs = 10) {
+//   float total = 0;
+//   for (int i = 0; i < samples; i++) {
+//     LoadCell.update();
+//     total += LoadCell.getData();
+//     delay(delayMs);
+//   }
+//   return total / samples;
+// }
+
 state getCurrentState() {
+    
+    // float weight = readAverageWeight(); // averaging
     LoadCell.update();
     float weight = LoadCell.getData();
 
