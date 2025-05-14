@@ -1,3 +1,4 @@
+#include <HX711_ADC.h>
 #include <RF22.h>
 #include <RF22Router.h>
 
@@ -6,9 +7,16 @@
 #define FREQUENCY 431.0
 RF22Router rf22(MY_ADDRESS);
 
+const int HX711_DOUT = 4; // HX711 data pin
+const int HX711_SCK = 5;  // HX711 clock pin
+HX711_ADC LoadCell(HX711_DOUT, HX711_SCK);
+
+const float NOEXIST_THRESHOLD = -50.0; // Threshold for no existence
+const float EMPTY_THRESHOLD = 20.0;   // Threshold for empty
+
 enum state {NOEXIST, EMPTY, FULL};
 
-state previusState = NOEXIST;
+state previousState = NOEXIST;
 
 const char* stateToString(state s) {
     switch (s) {
@@ -20,16 +28,19 @@ const char* stateToString(state s) {
 }
 
 state getCurrentState() {
-    // TODO: Take measurements and determine the state of the node
+    LoadCell.update();
+    float weight = LoadCell.getData();
 
-    // For now, we will simulate the state with a random number
-    // 0: NOEXIST, 1: EMPTY, 2: FULL
-    int randomValue = random(0, 3);
-    if (randomValue == 0) {
+    Serial.print("Measured Weight: ");
+    Serial.println(weight);
+
+    if(weight < NOEXIST_THRESHOLD) {
         return NOEXIST;
-    } else if (randomValue == 1) {
+    }
+    else if(weight < EMPTY_THRESHOLD) {
         return EMPTY;
-    } else if (randomValue == 2) {
+    }
+    else if(weight >= EMPTY_THRESHOLD) {
         return FULL;
     }
 
@@ -80,6 +91,19 @@ void setup() {
     rf22.setModemConfig(RF22::GFSK_Rb125Fd125);
     rf22.addRouteTo(DESTINATION_ADDRESS, DESTINATION_ADDRESS);
 
+    LoadCell.begin();
+    bool tare = true;
+    LoadCell.start(2000, tare);
+
+    if(LoadCell.getTareTimeoutFlag() || LoadCell.getSignalTimeoutFlag()){
+        Serial.println("HX711 not found. Check wiring and pin designations.");
+        while(1);
+    }
+    else{
+        float calibrationFactor = 1.0; // TODO: Set the calibration factor
+        LoadCell.setCalFactor(calibrationFactor);
+    }
+
     randomSeed(MY_ADDRESS);
 }
 
@@ -87,9 +111,9 @@ void loop() {
 
     state currentState = getCurrentState();
 
-    if(currentState != previusState) {
+    if(currentState != previousState) {
         sendPacket(currentState);
-        previusState = currentState;
+        previousState = currentState;
     }
     else{
         Serial.print("State unchanged: ");
