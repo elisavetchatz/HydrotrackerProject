@@ -9,7 +9,7 @@ logger.info("Log test message")
 root = tk.Tk()
 app = HydrotrackerMonitor(root, logger)
 
-reader = SerialReader(app, logger, port='COM5', baudrate=9600)
+reader = SerialReader(app, logger, port='COM7', baudrate=9600)
 reader.start()
 root.mainloop()
 
