@@ -1,9 +1,9 @@
 import tkinter as tk
+import configparser
 import random
 
 # CONFIG
-MAX_NODES = 5                   # maximum number of nodes
-UPDATE_INTERVAL = 1000          # milliseconds to update the GUI 
+UPDATE_INTERVAL = 1000             # milliseconds to update the GUI 
 FONT = "Ubuntu"                
 
 class HydrotrackerMonitor:
@@ -23,7 +23,7 @@ class HydrotrackerMonitor:
 
         # START GUI UPDATE LOOP
         self.update_gui_loop()
-        self.simulate_random_states()
+        # self.simulate_random_states() # for testing
 
     def create_gui_label(self, node_id):
         """ Creates a label for each node and adds it to the GUI """
@@ -68,9 +68,11 @@ class HydrotrackerMonitor:
 
         self.node_states[node_id] = new_state
 
-    def simulate_random_states(self):
-        node_id = random.randint(1, 20)
-        state = random.choice(["EMPTY", "NOTEMPTY", "NOTEXIST"])
-        self.update_node_state(node_id, state)
-        self.root.after(UPDATE_INTERVAL, self.simulate_random_states)
+    ## for testing purposes
+    # def simulate_random_states(self):
+    #     pass
+    #     # node_id = random.randint(1, 20)
+    #     # state = random.choice(["EMPTY", "NOTEMPTY", "NOTEXIST"])
+    #     # self.update_node_state(node_id, state)
+    #     # self.root.after(UPDATE_INTERVAL, self.simulate_random_states)
 
