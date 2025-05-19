@@ -12,29 +12,44 @@ const int HX711_SCK = 5;  // HX711 clock pin
 HX711_ADC LoadCell(HX711_DOUT, HX711_SCK);
 
 const float NOEXIST_THRESHOLD = -20.0; // Threshold for no existence
-const float EMPTY_THRESHOLD = 50.0;   // Threshold for empty
+const float EMPTY_THRESHOLD = 50.0;    // Threshold for empty
 
-enum state {NOEXIST, EMPTY, FULL};
+const int TARE_BUTTON_PIN = 8; // Pin for tare button
+
+enum state
+{
+    NOEXIST,
+    EMPTY,
+    FULL
+};
 
 state previousState = NOEXIST;
 
-const char* stateToString(state s) {
-    switch (s) {
-        case NOEXIST: return "NOTEXIST";
-        case EMPTY:   return "EMPTY";
-        case FULL:    return "NOTEMPTY";
-        default:      return "UNKNOWN";
+const char *stateToString(state s)
+{
+    switch (s)
+    {
+    case NOEXIST:
+        return "NOTEXIST";
+    case EMPTY:
+        return "EMPTY";
+    case FULL:
+        return "NOTEMPTY";
+    default:
+        return "UNKNOWN";
     }
 }
 
-state getCurrentState() {
-    
+state getCurrentState()
+{
+
     LoadCell.update();
     float currentWeight = LoadCell.getData();
     Serial.print("Measured Weight: ");
     Serial.println(currentWeight);
 
-    while(1){
+    while (1)
+    {
         delay(1000);
         LoadCell.update();
         float weight = LoadCell.getData();
@@ -42,39 +57,43 @@ state getCurrentState() {
         Serial.print("Measured Weight: ");
         Serial.println(weight);
 
-        if (weight < currentWeight + 1.0 && weight > currentWeight - 1.0) {
+        if (weight < currentWeight + 1.0 && weight > currentWeight - 1.0)
+        {
             currentWeight = weight;
-            break; //Exit the loop if weight is stable
+            break; // Exit the loop if weight is stable
         }
 
         currentWeight = weight;
     }
 
-    if(currentWeight < NOEXIST_THRESHOLD) {
+    if (currentWeight < NOEXIST_THRESHOLD)
+    {
         return NOEXIST;
     }
-    else if(currentWeight < EMPTY_THRESHOLD) {
+    else if (currentWeight < EMPTY_THRESHOLD)
+    {
         return EMPTY;
     }
-    else if(currentWeight >= EMPTY_THRESHOLD) {
+    else if (currentWeight >= EMPTY_THRESHOLD)
+    {
         return FULL;
     }
 
     return NOEXIST;
 }
 
-void sendPacket(state currentState) {
+void sendPacket(state currentState)
+{
     // Prepare the data to be sent - Format: <state>
     char data_read[RF22_ROUTER_MAX_MESSAGE_LEN];
     uint8_t data_send[RF22_ROUTER_MAX_MESSAGE_LEN];
     memset(data_read, '\0', sizeof(data_read));
     memset(data_send, '\0', sizeof(data_send));
 
-    const char* stateStr = stateToString(currentState);
+    const char *stateStr = stateToString(currentState);
     sprintf(data_read, "%s", stateStr);
     uint8_t msg_len = strlen(data_read) + 1;
     memcpy(data_send, data_read, msg_len);
-
 
     // Aloha protocol implementation
     bool successful_packet = false;
@@ -96,8 +115,11 @@ void sendPacket(state currentState) {
     }
 }
 
-void setup() {
+void setup()
+{
     Serial.begin(9600);
+
+    pinMode(TARE_BUTTON_PIN, INPUT);
 
     if (!rf22.init())
         Serial.println("RF22 init failed");
@@ -111,11 +133,14 @@ void setup() {
     bool tare = true;
     LoadCell.start(2000, tare);
 
-    if(LoadCell.getTareTimeoutFlag() || LoadCell.getSignalTimeoutFlag()){
+    if (LoadCell.getTareTimeoutFlag() || LoadCell.getSignalTimeoutFlag())
+    {
         Serial.println("HX711 not found. Check wiring and pin designations.");
-        while(1);
+        while (1)
+            ;
     }
-    else{
+    else
+    {
         float calibrationFactor = 448.31; // TODO: Set the calibration factor
         LoadCell.setCalFactor(calibrationFactor);
     }
@@ -123,15 +148,23 @@ void setup() {
     randomSeed(MY_ADDRESS);
 }
 
-void loop() {
+void loop()
+{
+    if (digitalRead(TARE_BUTTON_PIN) == HIGH)
+    {
+        LoadCell.tare();
+        Serial.println("Tare button pressed. Taring...");
+    }
 
     state currentState = getCurrentState();
 
-    if(currentState != previousState) {
+    if (currentState != previousState)
+    {
         sendPacket(currentState);
         previousState = currentState;
     }
-    else{
+    else
+    {
         Serial.print("State unchanged: ");
         Serial.println(stateToString(currentState));
     }
