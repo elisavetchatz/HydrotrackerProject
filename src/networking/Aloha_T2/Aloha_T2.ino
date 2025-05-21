@@ -120,7 +120,7 @@ void setup()
 {
     Serial.begin(9600);
 
-    pinMode(TARE_BUTTON_PIN, INPUT_PULLUP);
+    pinMode(TARE_BUTTON_PIN, INPUT);
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, LOW);
 
@@ -154,7 +154,7 @@ void setup()
 void loop()
 {
 
-    if (digitalRead(TARE_BUTTON_PIN) == LOW)
+    if (digitalRead(TARE_BUTTON_PIN) == HIGH)
     {
         Serial.println("Tare button pressed. Taring...");
         digitalWrite(LED_PIN, HIGH);
