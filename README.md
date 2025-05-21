@@ -1,4 +1,4 @@
-# 💧 Smart Water Cup Station for Cafés
+# 💧 Smart Water Cup Monitor for Cafés
 
 A smart hydration tracking system designed to remind users to drink water—evolved into a real-time service assistant tool for cafés.
 
@@ -21,24 +21,27 @@ When the system detects that a glass is **empty**, it sends a **notification** t
 The repository is organized into three main folders:
 
 ```
-📦 Hydrotracker
-├── 📁 measurements       
+📦 Hydrotracker      
 ├── 📁 media       
     ├── 📁 demo
 │   └── 📁 promo       
 ├── 📁 src                
 │   ├── 📁 data_processing 
-│   └── 📁 networking      
+│   └── 📁 networking  
+├── 📁 docs       
+    ├── 📁 assets
+│   └── 📁 report       
 ```
 
 ---
 
 ## 🛠️ Hardware Used
 
-- **Arduino Uno** 
-- **Velostat** sheet
-- **Resistor**
-...
+- **Arduino Uno**
+- **Load Cell**
+- **Amplifier**
+- **RF22 card**
+
 
 ---
 

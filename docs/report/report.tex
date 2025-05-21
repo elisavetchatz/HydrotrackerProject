@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[style=ieee]{biblatex} % Set the reference style to IEEE
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{titletoc}
+
+\usepackage{array} % For customizing the table
+\usepackage{booktabs} % For better quality horizontal lines
+\usepackage{graphicx} % Package for including images
+\usepackage{float}
+\usepackage{subcaption}
+
+% Define margins
+\usepackage[margin=1in]{geometry}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    % AUTH University logo
+    \includegraphics[width=0.24\textwidth]{LogoAUTH300ppi.png}
+    \par\vspace{2cm}
+
+    % University name and course details
+    {\Large \textbf{Aristotle University of Thessaloniki} \par}
+    \vspace{0.5cm}
+    {\large School of Electrical and Computer Engineering\par}
+    {\large 099 - Applications of Telecommunication Devices\par}
+    \vspace{3cm}
+
+    % Project details
+    {\Large \textbf{HydroTracker} \par}
+    {\large Description Line 1 \par}
+    {\large Description Line 2 \par}
+    \vspace{3cm}
+
+    % Team members
+    {\large \textbf{Team} \par}
+    \vspace{0.5cm}
+    \begin{tabular}{ll}
+    10670 & Maria Charisi \\
+    10792 & Elisavet Chatzikyrka \\
+    AEM3 & Ioannis Lolos\\
+    AEM4 & Maria Sotiria Kostomanolaki \\
+    \end{tabular}
+    \par\vspace{3cm}
+
+    % Date
+    {\today \par}
+\end{titlepage}
+
+\tableofcontents 
+
+\newpage 
+
+% Document content
+\section{Introduction}
+\input{Introduction}
+
+\section{Hardware}
+\input{Hardware}
+
+\section{Networking}
+\input{Networking}
+
+\section{Data Processing and User Interface}
+\input{DataProcessing}
+
+\section{Business Model}
+\input{BussinessModel}
+
+\section{Conclusion}
+\input{Conclusion}
+
+\end{document}

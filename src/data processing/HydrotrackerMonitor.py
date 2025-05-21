@@ -68,11 +68,10 @@ class HydrotrackerMonitor:
 
         self.node_states[node_id] = new_state
 
-    ## for testing purposes
-    # def simulate_random_states(self):
-    #     pass
-    #     # node_id = random.randint(1, 20)
-    #     # state = random.choice(["EMPTY", "NOTEMPTY", "NOTEXIST"])
-    #     # self.update_node_state(node_id, state)
-    #     # self.root.after(UPDATE_INTERVAL, self.simulate_random_states)
+    # for testing purposes
+    def simulate_random_states(self):
+        node_id = random.randint(1, 20)
+        state = random.choice(["EMPTY", "NOTEMPTY", "NOTEXIST"])
+        self.update_node_state(node_id, state)
+        self.root.after(UPDATE_INTERVAL, self.simulate_random_states)
 

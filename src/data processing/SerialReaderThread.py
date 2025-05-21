@@ -2,8 +2,8 @@ import serial
 import threading
 
 #CONFIG
-PORT='COM10'  # Serial port to connect to
-BAUDRATE=9600  # Baud rate for the serial connection
+PORT='COM10'    # Serial port to connect to
+BAUDRATE=9600   # Baud rate for the serial connection
 
 class SerialReaderThread:
     """
