@@ -15,6 +15,7 @@ const float NOEXIST_THRESHOLD = -20.0; // Threshold for no existence
 const float EMPTY_THRESHOLD = 50.0;    // Threshold for empty
 
 const int TARE_BUTTON_PIN = 8; // Pin for tare button
+const int LED_PIN = 7;         // Pin for LED
 
 enum state
 {
@@ -120,6 +121,8 @@ void setup()
     Serial.begin(9600);
 
     pinMode(TARE_BUTTON_PIN, INPUT);
+    pinMode(LED_PIN, OUTPUT);
+    digitalWrite(LED_PIN, LOW);
 
     if (!rf22.init())
         Serial.println("RF22 init failed");
@@ -152,8 +155,10 @@ void loop()
 {
     if (digitalRead(TARE_BUTTON_PIN) == HIGH)
     {
+        digitalWrite(LED_PIN, HIGH);
         LoadCell.tare();
         Serial.println("Tare button pressed. Taring...");
+        digitalWrite(LED_PIN, LOW);
     }
 
     state currentState = getCurrentState();
