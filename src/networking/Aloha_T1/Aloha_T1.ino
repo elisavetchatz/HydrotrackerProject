@@ -14,8 +14,15 @@ HX711_ADC LoadCell(HX711_DOUT, HX711_SCK);
 const float NOEXIST_THRESHOLD = -20.0; // Threshold for no existence
 const float EMPTY_THRESHOLD = 50.0;    // Threshold for empty
 
-const int TARE_BUTTON_PIN = 8; // Pin for tare button
+const int TARE_BUTTON_PIN = 2; // Pin for tare button
 const int LED_PIN = 7;         // Pin for LED
+
+volatile bool tareFlag = false; // Flag for tare button
+
+void onTareButtonPress()
+{
+    tareFlag = true;
+}
 
 enum state
 {
@@ -49,7 +56,7 @@ state getCurrentState()
     Serial.print("Measured Weight: ");
     Serial.println(currentWeight);
 
-    while (1)
+    while (!tareFlag)
     {
         delay(1000);
         LoadCell.update();
@@ -148,20 +155,25 @@ void setup()
         LoadCell.setCalFactor(calibrationFactor);
     }
 
+    pinMode(TARE_BUTTON_PIN, INPUT);
+    attachInterrupt(digitalPinToInterrupt(TARE_BUTTON_PIN), onTareButtonPress, RISING);
+
     randomSeed(MY_ADDRESS);
 }
 
 void loop()
 {
-    if (digitalRead(TARE_BUTTON_PIN) == HIGH)
+    state currentState = getCurrentState();
+
+    if (tareFlag)
     {
         digitalWrite(LED_PIN, HIGH);
         LoadCell.tare();
         Serial.println("Tare button pressed. Taring...");
         digitalWrite(LED_PIN, LOW);
-    }
 
-    state currentState = getCurrentState();
+        tareFlag = false;
+    }
 
     if (currentState != previousState)
     {
