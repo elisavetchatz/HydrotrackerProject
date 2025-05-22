@@ -16,7 +16,21 @@ List of materials used with relevant documentation
 We could also include a list of materials used for calibration (standard water cup and scale)
 
 \subsection{Load Cell}
-Section to explain how the load cell works and why we need the amplifier
+Section to explain how the load cell works and why we need the amplifier%%%%%%%%%%%%%
+
+\subsubsection{Taring and Calibration}
+Before the load cell can produce meaningful measurements, it must be properly zeroed and scaled. This is achieved through two essential steps: \textit{taring} and \textit{calibration}.
+
+\paragraph{Taring} is the process of removing any initial mechanical offset or weight from the sensor. When the system is powered on or reset, a \texttt{tare()} function is executed, which sets the current load cell reading to zero — assuming that no weight is applied. This is crucial for eliminating small offsets caused by the base structure or assembly.
+
+\paragraph{Calibration} involves placing a known weight on the coaster and recording the raw value from the HX711 output. This value is then used to compute a \textit{calibration factor}, which scales future measurements to actual weight units.
+
+
+explain how the user doew the taring with the button
+
+
+\subsection{3D printed cup base}
+explain the logic of the design and add figures
 
 \subsection{Step by Step Set-up}
 explain step by step set up 
