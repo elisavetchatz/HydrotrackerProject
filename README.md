@@ -1,76 +1,74 @@
-# 💧 Smart Water Cup Monitor for Cafés
+# 💧 Smart Water Cup Monitor for Cafés – HydroTracker
 
-A smart hydration tracking system designed to remind users to drink water—evolved into a real-time service assistant tool for cafés.
+HydroTracker is a smart hydration monitoring system originally designed to encourage water intake in work environments, now adapted into a **real-time service assistant** for **cafés**. It helps waitstaff **identify when customers' glasses are empty** and notifies them instantly—improving both **efficiency** and **customer experience**.
 
-## 🚀 Overview
+---
 
-This project began with the idea of a **smart base (coaster)** that tracks **daily water consumption** of office workers using a weight sensor and notifies them if they forget to hydrate.
+## 🚀 Project Overview
 
-Inspired by this concept, we **adapted** the system to be used in **cafés**, where when a customer’s glass is empty, the system notifies the server to refill it—enhancing customer service without manual checking.
+The idea began with a smart base (coaster) that uses a weight sensor to monitor the **daily water consumption** of users. Over time, the system evolved into a scalable solution for the **hospitality industry**, particularly cafés and restaurants.
+
+Instead of waiters constantly checking glasses, HydroTracker lets them know **exactly when a refill is needed**, thanks to an intelligent network of coasters.
+
+---
 
 ## 🎯 Use Case
 
-> 💡 Target: Cafés looking to automate customer service and ensure better hydration experience.
+> 💡 **Target audience**: Cafés and hospitality venues aiming to enhance service automation and hydration awareness.
 
-When the system detects that a glass is **empty**, it sends a **notification** to the waitstaff via a local network message. This is achieved using a **Velostat pressure-sensitive sensor** and an **Arduino** that processes the readings.
+Each coaster uses a **load cell sensor** connected to an **Arduino Uno** to detect changes in weight. When a glass is detected as **empty**, the node wirelessly transmits a message to a central receiver, which relays the update to a GUI system via serial communication.
 
 ---
 
 ## 🧠 Project Structure
 
-The repository is organized into three main folders:
-
-```
-📦 Hydrotracker      
-├── 📁 media       
-    ├── 📁 demo
-│   └── 📁 promo       
-├── 📁 src                
-│   ├── 📁 data_processing 
-│   └── 📁 networking  
-├── 📁 docs       
-    ├── 📁 assets
-│   └── 📁 report       
-```
+📦 Hydrotracker
+├── 📁 media # Videos, promo material, demo shots
+│ ├── 📁 demo
+│ └── 📁 promo
+├── 📁 src # Main source code (Python, Arduino)
+│ ├── 📁 data_processing
+│ └── 📁 networking
+├── 📁 docs # Documentation and reports
+│ ├── 📁 assets
+│ └── 📁 report
 
 ---
 
 ## 🛠️ Hardware Used
 
-- **Arduino Uno**
-- **Load Cell**
-- **Amplifier**
-- **RF22 card**
-
+- 🧠 **Arduino Uno** – used in both nodes and central receiver  
+- ⚖️ **5kg Load Cell** – detects weight of the glass  
+- 🔊 **HX711 Amplifier Module** – reads and amplifies sensor output  
+- 📡 **RFM22 ISM Transceiver Module** – enables node-to-node communication  
+- 🧩 **Breadboard & Jumper Wires**  
+- 🖨️ **3D-Printed Cup Base** – physically holds the sensor and glass  
 
 ---
 
-## 📐 Functionality
+## 📐 System Functionality
 
-### 🧪 Sensor Function
+### 🧪 Sensor Logic
 
-- Detects weight change through Velostat.
-- Determines if the cup is **full** or **empty**.
-- If the cup stays empty for a set duration → sends **notification**.
+- Load cell detects the **weight** of the glass
+- Readings are amplified and interpreted on the Arduino node
+- If weight is below a threshold for a set time → considered **empty**
 
-### 🔔 Notification System
+### 🔔 Notification & Communication
 
-- When the system detects an empty cup:
-  - Sends signal over Aloha protocol.
-  - Waiter receives a **message/alert** to refill water.
+- Node sends signal via **ALOHA-style RF protocol**
+- Central receiver aggregates messages and sends them to host PC
+- The PC displays each node’s state (e.g., FULL / EMPTY) in a **GUI dashboard**
+- Colored indicators show the status (e.g., 🟢 full, 🔴 empty)
 
 ---
 
 ## 📸 Media & Demo
 
-`media/` folder for:
-- Photos of the prototype
-- Videos of the system in action
-- Presentation slides
+The `media/` folder includes:
 
----
+- 📷 Photos of the working prototype  
+- 🎥 Demo videos showing the system in action  
+- 🖼️ Slides and visuals for presentations and promo material  
 
-## 📊 Measurements
-
-Sensor test results and raw data from experiments are stored in the `measurements/` folder.
-
+> Made with ☕ and 💡 by Team HydroTracker – Aristotle University of Thessaloniki  
