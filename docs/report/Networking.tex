@@ -1,7 +1,44 @@
-Intro to what this section will present, number of nodes used 
+The HydroTracker system utilizes a custom wireless communication network built on \textit{Arduino microcontrollers} and \textit{RFM22 ISM-band transceivers}. 
+Each coaster-shaped transmitter node, associated with a water glass, continuously monitors weight data using an \textit{HX711 load cell}. 
+This data is processed locally and transmitted wirelessly to a central receiver node. 
+The receiver then relays this information to a host computer for real-time visualization.
 
-\subsection{ALOHA Protocol}
-explain the ALOHA protocol
+In this section, we will describe the code implementation for both the receiver and transmitter nodes, and explain the wireless communication protocol used in the system.
+
+\subsection{Wireless Communication Protocol}
+
+The system uses the RF22Router library, which provides a basic routing layer over the RFM22 radio transceivers. 
+Each transmitter node and the receiver are assigned unique addresses, enabling reliable routing and identification of messages. 
+Communication operates on the \textit{444.0 MHz} frequency using \textit{Gaussian Frequency Shift Keying (GFSK)} modulation with a data rate of \textit{125 kbps}.
+
+To manage potential transmission collisions, the system implements a simplified \textit{ALOHA protocol} in the transmitter code.
+
+\begin{itemize}
+    \item Each transmitter sends a data packet using \texttt{sendtoWait()}, which waits for an acknowledgment from the receiver.
+    \item If the acknowledgment is not received (indicating a failed or collided transmission), the transmitter waits for a \textit{random backoff delay} between 200 ms and 3000 ms before retrying.
+    \item This randomized retransmission reduces the chance of repeated collisions when multiple nodes attempt to send data at the same time.
+\end{itemize}
+
+\begin{lstlisting}[language=C++, caption={ALOHA protocol implementation in the transmitter}]
+bool successful_packet = false;
+while (!successful_packet){
+
+    if (rf22.sendtoWait(data_send, msg_len, DESTINATION_ADDRESS) != RF22_ROUTER_ERROR_NONE)
+    {
+        Serial.print("Sending: ");
+        Serial.println(data_read);
+        long randNumber = random(200, 3000)
+        delay(randNumber);
+    }
+    else
+    {
+        successful_packet = true;
+        Serial.println("Packet sent successfully!");
+    }
+}
+\end{lstlisting}
+
+This approach is particularly suited for low-traffic, sporadic communication systems, such as HydroTracker, where nodes send updates only when state changes are detected. 
 
 \subsection{Receiver}
 Add and explain code 
