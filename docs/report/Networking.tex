@@ -11,8 +11,7 @@ The system uses the RF22Router library, which provides a basic routing layer ove
 Each transmitter node and the receiver are assigned unique addresses, enabling reliable routing and identification of messages. 
 Communication operates on the \textit{444.0 MHz} frequency using \textit{Gaussian Frequency Shift Keying (GFSK)} modulation with a data rate of \textit{125 kbps}.
 
-To manage potential transmission collisions, the system implements a simplified \textit{ALOHA protocol} in the transmitter code.
-
+To manage potential transmission collisions, the system implements a simplified \textit{ALOHA protocol} in the transmitter code:
 \begin{itemize}
     \item Each transmitter sends a data packet using \texttt{sendtoWait()}, which waits for an acknowledgment from the receiver.
     \item If the acknowledgment is not received (indicating a failed or collided transmission), the transmitter waits for a \textit{random backoff delay} between 200 ms and 3000 ms before retrying.
@@ -60,7 +59,6 @@ The transmitter code performs the following key functions:
     \item \textbf{Load cell initialization:}{
     Each transmitter uses an \textit{HX711} load cell amplifier to measure the weight of the glass. 
     The initialization of the load cell is performed during the \texttt{setup()} function.
-
     \begin{itemize}
         \item The data and clock pins of the HX711 are defined and used to create a \texttt{HX711\_ADC} object named \texttt{LoadCell}.
         \item The \texttt{LoadCell.begin()} function initializes the connection to the sensor.
@@ -103,7 +101,6 @@ The transmitter code performs the following key functions:
 
     The thresholds are defined based on the fact that the load cell is tared with an empty glass placed on it. 
     This implies the following:
-
     \begin{itemize}
         \item \textbf{Values around 0g:} The glass is empty.
         \item \textbf{Negative values:} The glass does not exist.

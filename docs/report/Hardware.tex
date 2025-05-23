@@ -1,36 +1,110 @@
-Intro to what this section will present
+This section presents the hardware and system architecture behind \textit{Hydrotracker}.  Below, we outline the materials used, the sensing principles, the mechanical base design, and the full setup procedure.
 
 \subsection{Materials Used}
-List of materials used with relevant documentation
-
+The following materials were used in constructing a functional prototype of our system:
 \begin{itemize}
-  \item Arduino Uno board
-  \item RFM22 ISM Tranceiver module
-  \item 5kg Load Cell
-  \item HX711 amplifier module
-  \item Breadboard
-  \item Jumper wires
-  \item 3D-printed cup base
+\item \textbf{Arduino Uno board} – the central microcontroller used to read sensor data and handle communication logic.
+\item \textbf{RFM22 ISM Transceiver module} – enables wireless communication between each coaster and a central receiver node.
+\item \textbf{3kg Load Cell} – senses the weight of the glass placed on the coaster.
+\item \textbf{HX711 Amplifier Module} – amplifies and digitizes the low-voltage analog signal from the load cell.
+\item \textbf{3D-printed coaster base} – a custom mechanical housing for the sensor and load distribution.
+\item \textbf{LED + 470 $\Omega $ resistor} – provides visual feedback for the taring process.
+\item \textbf{Push button} – used to initiate the taring routine manually.
+\end{itemize}
+For the calibration procedure, we also used:
+\begin{itemize}
+\item A standard empty water glass.
+\item A digital kitchen scale (±1 g precision).
 \end{itemize}
 
-We could also include a list of materials used for calibration (standard water cup and scale)
-
 \subsection{Load Cell}
-Section to explain how the load cell works and why we need the amplifier%%%%%%%%%%%%%
+The core of the system’s sensing capability lies in the load cell. A load cell is a transducer that converts mechanical force (weight) into an electrical signal. In our case, the 3kg bar-type load cell is placed beneath a flat surface where the glass rests (Fig: \ref{fig:cup-base-views}) .
 
-\subsubsection{Taring and Calibration}
-Before the load cell can produce meaningful measurements, it must be properly zeroed and scaled. This is achieved through two essential steps: \textit{taring} and \textit{calibration}.
+Since the voltage output from a load cell is very low (typically in the mV range), we use the HX711 module — a high-resolution 24-bit ADC amplifier — to digitize this signal and make it readable by the Arduino (Fig:~\ref{fig:loadcell-circuit-comparison}).
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{load cell images/loadcell_curcuit-.drawio.png}
+        \caption{Load cell circuit without weight}
+        \label{fig:loadcell-weight}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{load cell images/loadcell_curcuit-wheight.drawio.png}
+        \caption{Load cell circuit with weight}
+        \label{fig:loadcell-noweight}
+    \end{subfigure}
+    \caption{Comparison of load cell circuit states: with and without applied weight}
+    \label{fig:loadcell-circuit-comparison}
+\end{figure}
 
-\paragraph{Taring} is the process of removing any initial mechanical offset or weight from the sensor. When the system is powered on or reset, a \texttt{tare()} function is executed, which sets the current load cell reading to zero — assuming that no weight is applied. This is crucial for eliminating small offsets caused by the base structure or assembly.
 
-\paragraph{Calibration} involves placing a known weight on the coaster and recording the raw value from the HX711 output. This value is then used to compute a \textit{calibration factor}, which scales future measurements to actual weight units.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.35\linewidth]{load cell images/ChatGPT Image May 24, 2025, 01_41_52 AM.png}
+    \caption{}
+    \label{fig:enter-label}
+\end{figure}
 
+\subsection{LED-Resistor-Button}
+A small but essential subsystem in our design is composed of a push-button, an LED, and a 470 $\Omega$ resistor. This circuit provides user interaction and visual feedback during the taring process of the load cell.
 
-explain how the user doew the taring with the button
+When the system is powered on or reset, the load cell may carry residual mechanical offsets — due to the coaster’s base structure or the inherent weight of an empty cup. To correct this, we implement a manual taring mechanism, initiated by the user via the button.
+The button is connected to a digital input pin on the Arduino. When pressed, it triggers the execution of a tare function. This function sets the current output of the HX711 as the new zero reference, assuming the only weight applied is that of the empty cup.
 
+To indicate the progress of this operation, an \textit{LED} is also included. It is connected in series with a 470 $\Omega$ resistor to limit current and is wired to another digital pin configured as an output. When taring is in progress, the LED turns on. Once the process is complete, the LED switches off, notifying the user that the system is ready for use.
 
 \subsection{3D printed cup base}
-explain the logic of the design and add figures
+The physical housing of the coaster is critical to ensure consistent force transfer from the glass to the sensor. Our design consists of two interlocking 3D-printed shells (top and bottom) The upper platform is where the base of the glass rests, designed to evenly distribute the load
+This geometry ensures that vertical force is transmitted directly through the center of the load cell, minimizing measurement noise due to tilting or off-center loading.
 
-\subsection{Step by Step Set-up}
-explain step by step set up 
+Figures \ref{fig:base-bottom} and \ref{fig:base-side} show an exploded and assembled view of the base design.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{setup_images/base-bottom-view.jpg}
+        \caption{Bottom view of the cup base}
+        \label{fig:base-bottom}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{setup_images/base-side-view.jpg}
+        \caption{Side view of the cup base}
+        \label{fig:base-side}
+    \end{subfigure}
+    \caption{3D-printed coaster base: structural views}
+    \label{fig:cup-base-views}
+\end{figure}
+
+\subsection{Step Set-up}
+The system setup consists of four primary components working together: the mechanical base, the sensing subsystem, the user interface circuit, and the wireless communication module.
+
+The load cell is mounted securely within the custom-designed 3D-printed base to ensure proper force transfer from the glass to the sensor. Its output is routed to the HX711 amplifier module, which is responsible for digitizing the analog signal. The HX711 is then connected to the Arduino Uno, allowing the microcontroller to receive precise weight data.
+
+On the breadboard, there is a push-button and a LED in series with a 470 $\Omega$ resistor. The button is connected to a digital input pin and is used to trigger the taring process, while the LED is connected to an output pin and provides visual feedback indicating the system’s readiness.
+
+To enable communication between multiple coaster nodes and a central monitoring station, the system incorporates an RFM22 wireless transceiver, connected to the Arduino via SPI. This module transmits each node’s state information (\texttt{EMPTY}, \texttt{NOTEMPTY}, \texttt{NOTEXIST}) to a receiver, which updates the graphical user interface accordingly.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{setup_images/set-up-with-cup.jpg}
+        \caption{System setup with the cup placed on the coaster}
+        \label{fig:setup-with-cup}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{setup_images/set-up.jpg}
+        \caption{System setup without the cup}
+        \label{fig:setup-without-cup}
+    \end{subfigure}
+    \caption{Smart coaster hardware setup: with and without the cup}
+    \label{fig:system-setup-views}
+\end{figure}
