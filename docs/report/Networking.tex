@@ -41,7 +41,145 @@ while (!successful_packet){
 This approach is particularly suited for low-traffic, sporadic communication systems, such as HydroTracker, where nodes send updates only when state changes are detected. 
 
 \subsection{Receiver}
-Add and explain code 
+The receiver node is responsible for collecting data from multiple transmitters and relaying it to the host computer.
+Its primary tasks are:
+
+\begin{itemize}
+    \item Initialize the RF22 radio module.
+    \item Define known routes to each transmitter node.
+    \item Continuously receive incoming data packets.
+    \item Format the received data as \texttt{Node <node\_id> - State: <state>}.
+    \item Forward the formatted data to the host computer via serial communication for further processing and display.
+\end{itemize}
 
 \subsection{Transmitters}
-Add and explain code
+Each transmitter node is responsible for monitoring the weight of an individual glass and wirelessly reporting its status to the receiver node.
+The transmitter code performs the following key functions:
+
+\begin{enumerate}
+    \item \textbf{Load cell initialization:}{
+    Each transmitter uses an \textit{HX711} load cell amplifier to measure the weight of the glass. 
+    The initialization of the load cell is performed during the \texttt{setup()} function.
+
+    \begin{itemize}
+        \item The data and clock pins of the HX711 are defined and used to create a \texttt{HX711\_ADC} object named \texttt{LoadCell}.
+        \item The \texttt{LoadCell.begin()} function initializes the connection to the sensor.
+        \item The \texttt{LoadCell.start(2000, tare)} function starts the sensor with a 2-second warm-up period and performs a tare (zeroing) operation.
+        \item If initialization is successful, a calibration factor is applied using \texttt{LoadCell.setCalFactor()}. This factor is determined empirically through a calibration process and converts raw readings into meaningful weight units.
+    \end{itemize}
+
+
+    \begin{lstlisting}[language=C++, caption={Load cell initialization}]
+    #include <HX711_ADC.h>
+
+    const int HX711_DOUT = 4; // HX711 data pin
+    const int HX711_SCK = 5;  // HX711 clock pin
+    HX711_ADC LoadCell(HX711_DOUT, HX711_SCK);
+
+    void setup() {
+        LoadCell.begin();
+        bool tare = true;
+        LoadCell.start(2000, tare);
+
+        if (LoadCell.getTareTimeoutFlag() || LoadCell.getSignalTimeoutFlag())
+        {
+            Serial.println("HX711 not found. Check wiring and pin designations.");
+            while (1);
+        }
+        else
+        {
+            float calibrationFactor = 448.31; // Calibration Factor
+            LoadCell.setCalFactor(calibrationFactor);
+        }
+    }
+    \end{lstlisting}}
+
+    \item \textbf{Weight monitoring and State classification:}{
+    The function \texttt{getCurrentState()} is responsible for determining the current state of the transmitter node based on the measured weight. 
+    It uses predefined threshold values to classify the state of the glass as either \texttt{NOTEXIST}, \texttt{EMPTY}, or \texttt{FULL}.
+
+    Before classification, the function ensures that the weight reading is stable by repeatedly sampling the load cell until the weight change falls within a ±1g margin.
+    This is necessary because, after a change in weight, the load cell may take a few seconds to stabilize.
+
+    The thresholds are defined based on the fact that the load cell is tared with an empty glass placed on it. 
+    This implies the following:
+
+    \begin{itemize}
+        \item \textbf{Values around 0g:} The glass is empty.
+        \item \textbf{Negative values:} The glass does not exist.
+        \item \textbf{Positive values:} The glass contains some amount of water.
+    \end{itemize}
+
+    \begin{lstlisting}[language=C++, caption={Weight monitoring and state classification}]
+    const float NOTEXIST_THRESHOLD = -20.0; // Threshold for no existence
+    const float EMPTY_THRESHOLD = 50.0;    // Threshold for empty
+
+    state getCurrentState(){
+
+        LoadCell.update();
+        float currentWeight = LoadCell.getData();
+
+        while (1)
+        {
+            delay(1000);
+            LoadCell.update();
+            float weight = LoadCell.getData();
+
+            if (weight < currentWeight + 1.0 && weight > currentWeight - 1.0)
+            {
+                currentWeight = weight;
+                break; // Exit the loop if weight is stable
+            }
+
+            currentWeight = weight;
+        }
+
+        if (currentWeight < NOTEXIST_THRESHOLD) return NOTEXIST;
+        else if (currentWeight < EMPTY_THRESHOLD) return EMPTY;
+        else if (currentWeight >= EMPTY_THRESHOLD) return NOTEMPTY;
+    }
+    \end{lstlisting}}
+
+    \item \textbf{Tare function:}{
+    The user can manually tare the load cell by pressing a button connected to a digital pin.
+    The tare function is triggered when the button is pressed, and it sets the current weight reading to zero.
+    This is useful for recalibrating the load cell when a new glass is placed on it.
+    
+    \begin{lstlisting}[language=C++, caption={Tare function}]
+    if (digitalRead(TARE_BUTTON_PIN) == HIGH)
+    {
+        Serial.println("Tare button pressed. Taring...");
+        digitalWrite(LED_PIN, HIGH);
+        LoadCell.tare();
+        digitalWrite(LED_PIN, LOW);
+    }
+    \end{lstlisting}}
+
+    \item \textbf{Data transmission:}{
+    The packet transmission is handled by the \texttt{sendPacket()} function. 
+    This function formats the current state as a string (e.g., \texttt{"EMPTY"}, \texttt{NOTEMPTY"}, \texttt{"NOTEXIST"}) and attempts to transmit it to the receiver node using the \textit{ALOHA protocol}.
+
+    To optimize network usage and conserve energy, the transmitter only sends a packet when a change in the glass state is detected.
+    To achieve this, in the \texttt{loop()} function, the following steps are performed:
+    \begin{itemize}
+        \item The transmitter maintains a record of the \texttt{previousState}.
+        \item On each loop iteration, the current state is determined using \texttt{getCurrentState()}.
+        \item If the state is unchanged, no packet is sent.
+        \item If the state changes, the new state is sent using \texttt{sendPacket()} and \texttt{previousState} is updated accordingly.
+    \end{itemize}
+
+    \begin{lstlisting}[language=C++, caption={Packet transmission on state change}]
+    state currentState = getCurrentState();
+
+    if (currentState != previousState)
+    {
+        sendPacket(currentState);
+        previousState = currentState;
+    }
+    else
+    {
+        Serial.print("State unchanged: ");
+        Serial.println(stateToString(currentState));
+    }
+    \end{lstlisting}}
+\end{enumerate}
