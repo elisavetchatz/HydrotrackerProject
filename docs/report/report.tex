@@ -14,7 +14,6 @@
 % Define margins
 \usepackage[margin=1in]{geometry}
 
-% Listings package for code formatting
 \usepackage{listings}
 \usepackage{xcolor}
 
@@ -38,6 +37,7 @@
   commentstyle=\color{gray},
   stringstyle=\color{orange},
 }
+
 
 \begin{document}
 
@@ -64,8 +64,8 @@
     {\large \textbf{Team} \par}
     \vspace{0.5cm}
     \begin{tabular}{ll}
-    10670 & Maria Charisi \\
-    10792 & Elisavet Chatzikyrka \\
+    AEM1 & Maria Charisi \\
+    AEM2 & Elisavet Chatzikyrka \\
     AEM3 & Ioannis Lolos\\
     AEM4 & Maria Sotiria Kostomanolaki \\
     \end{tabular}
@@ -73,6 +73,12 @@
 
     % Date
     {\today \par}
+
+    \bigskip
+    \noindent
+    \textbf{Project Repository:} \url{https://github.com/elisavetchatz/HydrotrackerProject} \\
+    \textbf{Demo Video:} \url{https://www.youtube.com}
+
 \end{titlepage}
 
 \tableofcontents 
@@ -97,5 +103,25 @@
 
 \section{Conclusion}
 \input{Conclusion}
+
+\begin{thebibliography}{9}
+
+\bibitem{hx711-youtube}
+HX711 with a Four Wire Load Cell and Arduino | Step by Step Guide., 
+\textit{YouTube video}, accessed May 2025. \\
+\url{https://www.youtube.com/watch?v=sxzoAGf1kOo}
+
+\bibitem{hx711-github}
+$HX711\_ADC$, 
+\textit{GitHub Repository}, accessed May 2025. \\
+\url{https://github.com/olkal/HX711_ADC}
+
+\bibitem{prof-code}
+Lab Starter Code – Applications of Telecommunication Devices, 
+provided by Prof. [Dimitriou Antonios], AUTH, Spring 2025.
+
+
+\end{thebibliography}
+
 
 \end{document}
