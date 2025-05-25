@@ -1,4 +1,4 @@
-This section presents the hardware and system architecture behind \textit{Hydrotracker}.  Below, we outline the materials used, the sensing principles, the mechanical base design, and the full setup procedure.
+This section presents the hardware behind \textit{Hydrotracker}.  Below, we outline the materials used, the sensing principles, the mechanical base design and the full setup procedure.
 
 \subsection{Materials Used}
 The following materials were used in constructing a functional prototype of our system:
@@ -18,9 +18,9 @@ For the calibration procedure, we also used:
 \end{itemize}
 
 \subsection{Load Cell}
-The core of the system’s sensing capability lies in the load cell. A load cell is a transducer that converts mechanical force (weight) into an electrical signal. In our case, the 3kg bar-type load cell is placed beneath a flat surface where the glass rests (Fig: \ref{fig:cup-base-views}) .
+The core of the system’s sensing capability lies in the load cell. A load cell is a transducer that converts the force (weight) applied to it into an electrical signal. When an object is placed on the load cell, it slightly deforms (Fig~\ref{fig:loadcell_deforms}). This deformation changes the electrical resistance inside the sensor (Fig~\ref{fig:loadcell-circuit-comparison}), which is then converted into a voltage signal proportional to the weight. This signal can be read by a microcontroller (e.g., Arduino) to determine how much the object weighs, up to a maximum of 3kg. In our case, the 3kg bar-type load cell is placed beneath a flat surface where the glass rests (Fig: \ref{fig:cup-base-views}) .
 
-Since the voltage output from a load cell is very low (typically in the mV range), we use the HX711 module — a high-resolution 24-bit ADC amplifier — to digitize this signal and make it readable by the Arduino (Fig:~\ref{fig:loadcell-circuit-comparison}).
+Since the voltage output from a load cell is very low (typically in the mV range), we use the HX711 module — a high-resolution 24-bit ADC amplifier — to digitize this signal and make it readable by the Arduino (Fig:~\ref{fig:system-setup-views}).
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
@@ -39,13 +39,11 @@ Since the voltage output from a load cell is very low (typically in the mV range
     \caption{Comparison of load cell circuit states: with and without applied weight}
     \label{fig:loadcell-circuit-comparison}
 \end{figure}
-
-
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.35\linewidth]{load cell images/ChatGPT Image May 24, 2025, 01_41_52 AM.png}
-    \caption{}
-    \label{fig:enter-label}
+    \includegraphics[width=0.35\linewidth]{load cell images/load cell deformation no back.png}
+    \caption{Load cell slightly deformates when weight is placed on it}
+    \label{fig:loadcell_deforms}
 \end{figure}
 
 \subsection{LED-Resistor-Button}
@@ -58,9 +56,7 @@ To indicate the progress of this operation, an \textit{LED} is also included. It
 
 \subsection{3D printed cup base}
 The physical housing of the coaster is critical to ensure consistent force transfer from the glass to the sensor. Our design consists of two interlocking 3D-printed shells (top and bottom) The upper platform is where the base of the glass rests, designed to evenly distribute the load
-This geometry ensures that vertical force is transmitted directly through the center of the load cell, minimizing measurement noise due to tilting or off-center loading.
-
-Figures \ref{fig:base-bottom} and \ref{fig:base-side} show an exploded and assembled view of the base design.
+This geometry ensures that vertical force is transmitted directly through the center of the load cell, minimizing measurement noise due to tilting or off-center loading. Figures \ref{fig:base-bottom} and \ref{fig:base-side} show a bottom and a side view of the base design, with the load cell integrated.
 
 \begin{figure}[H]
     \centering
@@ -81,12 +77,12 @@ Figures \ref{fig:base-bottom} and \ref{fig:base-side} show an exploded and assem
     \label{fig:cup-base-views}
 \end{figure}
 
-\subsection{Step Set-up}
+\subsection{Set-up}
 The system setup consists of four primary components working together: the mechanical base, the sensing subsystem, the user interface circuit, and the wireless communication module.
 
-The load cell is mounted securely within the custom-designed 3D-printed base to ensure proper force transfer from the glass to the sensor. Its output is routed to the HX711 amplifier module, which is responsible for digitizing the analog signal. The HX711 is then connected to the Arduino Uno, allowing the microcontroller to receive precise weight data.
+The load cell is mounted securely within the custom-designed 3D-printed base. Its output is routed to the HX711 amplifier module, which is responsible for digitizing the analog signal. The HX711 is then connected to the Arduino Uno, allowing the microcontroller to receive precise weight data.
 
-On the breadboard, there is a push-button and a LED in series with a 470 $\Omega$ resistor. The button is connected to a digital input pin and is used to trigger the taring process, while the LED is connected to an output pin and provides visual feedback indicating the system’s readiness.
+On the breadboard, the push-button and LED are in series with the 470 $\Omega$ resistor. The button is connected to a digital input pin and is used to trigger the taring process, while the LED is connected to an output pin and provides visual feedback indicating the system’s readiness.
 
 To enable communication between multiple coaster nodes and a central monitoring station, the system incorporates an RFM22 wireless transceiver, connected to the Arduino via SPI. This module transmits each node’s state information (\texttt{EMPTY}, \texttt{NOTEMPTY}, \texttt{NOTEXIST}) to a receiver, which updates the graphical user interface accordingly.
 
