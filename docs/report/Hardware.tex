@@ -32,7 +32,7 @@ Since the voltage output from a load cell is very low (typically in the mV range
     \hfill
     \begin{subfigure}[b]{0.45\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{load cell images/loadcell_curcuit-wheight.drawio.png}
+        \includegraphics[width=\linewidth]{load cell images/loadcell_curcuit-weight.drawio.png}
         \caption{Load cell circuit with weight}
         \label{fig:loadcell-noweight}
     \end{subfigure}
@@ -55,7 +55,9 @@ The button is connected to a digital input pin on the Arduino. When pressed, it 
 To indicate the progress of this operation, an \textit{LED} is also included. It is connected in series with a 470 $\Omega$ resistor to limit current and is wired to another digital pin configured as an output. When taring is in progress, the LED turns on. Once the process is complete, the LED switches off, notifying the user that the system is ready for use.
 
 \subsection{3D printed cup base}
-The physical housing of the coaster is critical to ensure consistent force transfer from the glass to the sensor. Our design consists of two interlocking 3D-printed shells (top and bottom) The upper platform is where the base of the glass rests, designed to evenly distribute the load
+The physical housing of the coaster is critical to ensure consistent force transfer from the glass to the sensor. Our design consists of two %interlocking 
+3D-printed shells (top and bottom). The upper platform is where the base of the glass rests, designed to %evenly distribute the load
+concentrate the load to the edge of the load cell for maximum accuracy.
 This geometry ensures that vertical force is transmitted directly through the center of the load cell, minimizing measurement noise due to tilting or off-center loading. Figures \ref{fig:base-bottom} and \ref{fig:base-side} show a bottom and a side view of the base design, with the load cell integrated.
 
 \begin{figure}[H]
@@ -103,4 +105,12 @@ To enable communication between multiple coaster nodes and a central monitoring 
     \end{subfigure}
     \caption{Smart coaster hardware setup: with and without the cup}
     \label{fig:system-setup-views}
+\end{figure}
+
+The full connection diagram of the system is displayed on Figure \ref{fig:circuit}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{load cell images/circuit.png}
+    \caption{System connection diagram}
+    \label{fig:circuit}
 \end{figure}
