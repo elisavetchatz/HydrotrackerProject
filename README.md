@@ -21,7 +21,7 @@ Each coaster uses a **load cell sensor** connected to an **Arduino Uno** to dete
 ---
 
 ## 🧠 Project Structure
-
+```
 📦 Hydrotracker
 ├── 📁 media # Videos, promo material, demo shots
 │ ├── 📁 demo
@@ -31,8 +31,12 @@ Each coaster uses a **load cell sensor** connected to an **Arduino Uno** to dete
 │ └── 📁 networking
 ├── 📁 docs # Documentation and reports
 │ ├── 📁 assets
+│ ├── 📁 gui_images
+│ ├── 📁 load cell images
+│ ├── 📁 setup_images
 │ └── 📁 report
-
+├── 📁 3d_prints # 3D-printable .stl files
+```
 ---
 
 ## 🛠️ Hardware Used
