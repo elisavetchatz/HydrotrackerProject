@@ -84,9 +84,18 @@ The system setup consists of four primary components working together: the mecha
 
 The load cell is mounted securely within the custom-designed 3D-printed base. Its output is routed to the HX711 amplifier module, which is responsible for digitizing the analog signal. The HX711 is then connected to the Arduino Uno, allowing the microcontroller to receive precise weight data.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{load cell images/circuit.png}
+    \caption{System connection diagram}
+    \label{fig:circuit}
+\end{figure}
+
 On the breadboard, the push-button and LED are in series with the 470 $\Omega$ resistor. The button is connected to a digital input pin and is used to trigger the taring process, while the LED is connected to an output pin and provides visual feedback indicating the system’s readiness.
 
 To enable communication between multiple coaster nodes and a central monitoring station, the system incorporates an RFM22 wireless transceiver, connected to the Arduino via SPI. This module transmits each node’s state information (\texttt{EMPTY}, \texttt{NOTEMPTY}, \texttt{NOTEXIST}) to a receiver, which updates the graphical user interface accordingly.
+
+The full connection diagram of the system is displayed on Figure \ref{fig:circuit}
 
 \begin{figure}[H]
     \centering
@@ -105,12 +114,4 @@ To enable communication between multiple coaster nodes and a central monitoring 
     \end{subfigure}
     \caption{Smart coaster hardware setup: with and without the cup}
     \label{fig:system-setup-views}
-\end{figure}
-
-The full connection diagram of the system is displayed on Figure \ref{fig:circuit}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth]{load cell images/circuit.png}
-    \caption{System connection diagram}
-    \label{fig:circuit}
 \end{figure}
