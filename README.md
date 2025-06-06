@@ -31,9 +31,10 @@ Each coaster uses a **load cell sensor** connected to an **Arduino Uno** to dete
 │ └── 📁 networking
 ├── 📁 docs # Documentation and reports
 │ ├── 📁 assets
-│ ├── 📁 gui_images
-│ ├── 📁 load cell images
-│ ├── 📁 setup_images
+│   ├── 📁 gui_images
+│   ├── 📁 load cell images
+│   ├── 📁 setup_images
+|   ├── 📁 business_images
 │ └── 📁 report
 ├── 📁 3d_prints # 3D-printable .stl files
 ```
@@ -42,7 +43,7 @@ Each coaster uses a **load cell sensor** connected to an **Arduino Uno** to dete
 ## 🛠️ Hardware Used
 
 - 🧠 **Arduino Uno** – used in both nodes and central receiver  
-- ⚖️ **5kg Load Cell** – detects weight of the glass  
+- ⚖️ **3kg Load Cell** – detects weight of the glass  
 - 🔊 **HX711 Amplifier Module** – reads and amplifies sensor output  
 - 📡 **RFM22 ISM Transceiver Module** – enables node-to-node communication  
 - 🧩 **Breadboard & Jumper Wires**  
@@ -70,9 +71,17 @@ Each coaster uses a **load cell sensor** connected to an **Arduino Uno** to dete
 ## 📸 Media & Demo
 
 The `media/` folder includes:
+  
+- 🎥 Demo video showing the system in action  
+- 🖼️ Slides for presentations 
+- 🎥 Promo video  
 
-- 📷 Photos of the working prototype  
-- 🎥 Demo videos showing the system in action  
-- 🖼️ Slides and visuals for presentations and promo material  
+### ▶️ Watch Videos
+
+[![Demo Video](https://img.youtube.com/vi/DEMO_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=DEMO_VIDEO_ID)
+> 🔧 Real-time demo of HydroTracker in action
+
+[![Promo Video](https://img.youtube.com/vi/PROMO_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=PROMO_VIDEO_ID)
+> 🎬 Promotional overview for cafés
 
 > Made with ☕ and 💡 by Team HydroTracker – Aristotle University of Thessaloniki  
