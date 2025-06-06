@@ -1,4 +1,9 @@
-# 💧 Smart Water Cup Monitor for Cafés – HydroTracker
+# 💧 HydroTracker - Smart Water Cup Monitor for Cafés
+<p align="center">
+  <img src="docs/assets/logo.png" alt="Hydrotracker Logo" width="400"/>
+</p>
+
+
 
 HydroTracker is a smart hydration monitoring system originally designed to encourage water intake in work environments, now adapted into a **real-time service assistant** for **cafés**. It helps waitstaff **identify when customers' glasses are empty** and notifies them instantly—improving both **efficiency** and **customer experience**.
 
