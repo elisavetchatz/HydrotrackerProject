@@ -78,10 +78,8 @@ The `media/` folder includes:
 
 ### ▶️ Watch Videos
 
-[![Demo Video](https://img.youtube.com/vi/DEMO_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=DEMO_VIDEO_ID)
-> 🔧 Real-time demo of HydroTracker in action
+🔧 Real-time demo of HydroTracker in action: [Demo Video](https://www.youtube.com/watch?v=DEMO_VIDEO_ID)
 
-[![Promo Video](https://img.youtube.com/vi/PROMO_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=PROMO_VIDEO_ID)
-> 🎬 Promotional overview for cafés
+🎬 Promotional overview for cafés: [Promo Video](https://www.youtube.com/watch?v=PROMO_VIDEO_ID)
 
 > Made with ☕ and 💡 by Team HydroTracker – Aristotle University of Thessaloniki  
